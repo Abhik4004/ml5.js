@@ -4,11 +4,12 @@ const video = document.getElementById("video");
 const gameResult = document.getElementById("gameResult");
 
 //example : https://teachablemachine.withgoogle.com/models/LCFjaO7WV/model.json
-const modelUrl = "ADD YOUR MODEL URL HERE";
+const modelUrl =
+  "https://teachablemachine.withgoogle.com/models/zavXHgMUq/model.json";
 let userChoice = "";
 
 //Part 1 : Create Image Classifier
-let classifier;
+let classifier = ml5.imageClassifier(modelUrl, modelLoaded);
 
 function modelLoaded() {
   console.log("Model Loaded");
@@ -24,6 +25,11 @@ async function startVideo() {
 
 function classifyGesture() {
   //Part 2 : Use Image Classifer
+  classifier.classify(video, (results) => {
+    userChoice = results[0].label;
+    gesture.innerText = `Your gesture: ${userChoice}`;
+    classifyGesture();
+  });
 }
 
 startBtn.addEventListener("click", () => {
